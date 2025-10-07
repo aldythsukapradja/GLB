@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RMO Cosmo — Reservoir Galaxy (v5)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg0:#060a13; --bg1:#0a1426; --text:#e7f2ff; --muted:#9db0cc;
+  --accent:#7ef2ff; --accent2:#3fd0ff;
+  --ring:#8de9ff30; --ring2:#3fd0ff22; --ring3:#7ef2ff18;
+  --glow: 0 0 34px rgba(126,242,255,.55),0 0 110px rgba(63,208,255,.30);
+  --shadow: 0 20px 90px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.04);
+}
+*{box-sizing:border-box} html,body{height:100%}
+body{
+  margin:0; color:var(--text); font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+  background:
+    radial-gradient(1200px 800px at 70% -10%, rgba(88,170,255,.22), transparent 60%),
+    radial-gradient(1200px 800px at -20% 40%, rgba(78,255,228,.12), transparent 60%),
+    linear-gradient(180deg,var(--bg0),var(--bg1));
+  overflow:hidden;
+}
+/* Header */
+.header{ position:fixed; inset:0 0 auto 0; z-index:10; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 14px;
+  background: linear-gradient(180deg, rgba(10,19,36,.75), rgba(10,19,36,0)); }
+.brand{ display:flex; align-items:center; gap:10px; font-weight:800 }
+.controls{ display:flex; gap:8px; flex-wrap:wrap }
+.btn{ appearance:none; border:1px solid rgba(126,242,255,.25); background: rgba(126,242,255,.08); color:var(--text);
+  font-weight:700; border-radius:12px; padding:10px 12px; cursor:pointer }
+.btn.primary{ background: linear-gradient(90deg,var(--accent),var(--accent2)); color:#04121a; box-shadow: 0 10px 40px rgba(63,208,255,.35) }
+label{ color:var(--muted); font-size:13px; display:flex; gap:6px; align-items:center }
+input[type=range]{ accent-color:#3fd0ff }
+/* Stage */
+.stage{ position:absolute; inset:0; display:grid; place-items:center; padding-top:44px }
+.system{ position:relative; width:min(1200px, 95vmin); aspect-ratio:1/1; border-radius:50%; box-shadow: var(--shadow) }
+/* Futuristic energy core */
+.core{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:26%; aspect-ratio:1/1; border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(126,242,255,.95) 0%, rgba(63,208,255,.75) 18%, rgba(10,35,48,1) 65%),
+    conic-gradient(from 180deg at 50% 50%, rgba(63,208,255,.25), rgba(126,242,255,.05), rgba(63,208,255,.25));
+  border:1px solid rgba(126,242,255,.35);
+  box-shadow: 0 0 70px rgba(126,242,255,.55), 0 0 180px rgba(63,208,255,.35), inset 0 0 50px rgba(126,242,255,.25);
+}
+.core::before{
+  content:""; position:absolute; inset:12%; border-radius:50%;
+  background: radial-gradient(circle, rgba(126,242,255,.25), rgba(126,242,255,0) 60%);
+  filter: blur(8px); animation: ripple 5s ease-in-out infinite;
+}
+.core::after{
+  content:""; position:absolute; inset:-2%; border: 2px solid rgba(126,242,255,.25); border-radius:50%;
+  mask: radial-gradient(circle, transparent 59%, #000 60%);
+  animation: ring 8s linear infinite;
+}
+@keyframes ripple{ 0%{transform:scale(0.95)} 50%{transform:scale(1.05)} 100%{transform:scale(0.95)} }
+@keyframes ring{ to{ transform: rotate(360deg) } }
+/* Orbit outlines (elliptical + tilt) */
+.orbit{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(var(--tilt));
+  border-radius:50%; border:1px dashed var(--ring); pointer-events:none; }
+.r2{ width:70%; height:52%; border-color:var(--ring2) }   /* Inner (Optimization) */
+.r3{ width:88%; height:64%; border-color:var(--ring3) }   /* Middle (Analysis) */
+.r4{ width:108%; height:78% }                              /* Outer (Monitoring) */
+/* Planets */
+.planet{ position:absolute; width:70px; height:70px; border-radius:16px; display:grid; place-items:center;
+  background: linear-gradient(180deg, rgba(126,242,255,.22), rgba(126,242,255,.06));
+  border:1px solid rgba(126,242,255,.35); box-shadow: var(--glow);
+  transition: transform .15s ease, box-shadow .15s ease; will-change: transform; }
+.planet:hover{ transform: scale(1.06); box-shadow: 0 0 28px rgba(126,242,255,.75) }
+.label{ position:absolute; top:82px; left:50%; transform:translateX(-50%); font-size:12px; color:var(--muted); white-space:nowrap }
+.icon{ width:28px; height:28px }
+@media (max-width: 900px){ .planet{ width:62px; height:62px } .label{ top:74px } }
+@media (max-width: 560px){ .planet{ width:54px; height:54px } .label{ display:none } }
+/* Stars */
+.stars,.stars2{ position:fixed; inset:0; pointer-events:none }
+.stars{ background-image: radial-gradient(1.4px 1.4px at 30% 40%, #fff8 60%, transparent 61%), radial-gradient(1.2px 1.2px at 70% 20%, #fff8 60%, transparent 61%); opacity:.18; animation: twinkle 10s linear infinite }
+.stars2{ background-image: radial-gradient(1px 1px at 60% 70%, #fff6 60%, transparent 61%), radial-gradient(1px 1px at 15% 30%, #fff6 60%, transparent 61%); opacity:.12; animation: twinkle 14s linear infinite reverse }
+@keyframes twinkle{ 0%,100%{opacity:.14} 50%{opacity:.26} }
+</style>
+</head>
+<body>
+<div class="stars"></div><div class="stars2"></div>
+<div class="header">
+  <div class="brand">
+    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:linear-gradient(90deg,#7ef2ff,#3fd0ff);box-shadow:0 0 12px #7ef2ff88,0 0 28px #3fd0ff55"></span>
+    <div style="display:grid;line-height:1">
+      <span style="font-weight:800">RMO Cosmo</span>
+      <small style="color:var(--muted)">Reservoir Galaxy • 3 Orbits • 19 Workstreams</small>
+    </div>
+  </div>
+  <div class="controls">
+    <button id="pauseBtn" class="btn">Pause</button>
+    <button id="slowBtn" class="btn">Slow</button>
+    <button id="normalBtn" class="btn primary">Normal</button>
+    <button id="fastBtn" class="btn">Fast</button>
+    <label> Tilt <input id="tiltRange" type="range" min="-45" max="45" value="18"> </label>
+    <button id="exportBtn" class="btn">Export PNG</button>
+  </div>
+</div>
+<div class="stage">
+  <div class="system" id="system">
+    <div class="core" aria-label="RMO Cosmo core"></div>
+    <div class="orbit r2" style="--tilt:18deg"></div>
+    <div class="orbit r3" style="--tilt:18deg"></div>
+    <div class="orbit r4" style="--tilt:18deg"></div>
+  </div>
+</div>
+<script>
+/* Icons */
+const I = {
+  chart:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20V4M21 20H3M7 16V8M12 20V6M17 20V11"/></svg>`,
+  health:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2-5 4 12 2-7h6"/></svg>`,
+  trend:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 7-7"/><path d="M21 21H3V3"/></svg>`,
+  barsUp:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20V4M21 20H3"/><path d="M7 20V10M12 20V12M17 20V6"/></svg>`,
+  brief:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6V4a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v2"/><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg>`,
+  report:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v6h6"/><path d="M9 13h6M9 17h6"/></svg>`,
+  gear:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 8 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 3.4 15a1.65 1.65 0 0 0-1.51-1H2a2 2 0 1 1 0-4h-.09A1.65 1.65 0 0 0 3.4 8a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8 3.4a1.65 1.65 0 0 0 1-1.51V2a2 2 0 1 1 4 0v.09A1.65 1.65 0 0 0 16 3.4a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 20.6 8c.36.58.36 1.31 0 1.89a1.65 1.65 0 0 0-.33 1.82z"/></svg>`,
+  eye:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
+  loop:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a6 6 0 0 1 6-6h11"/><path d="M21 12a6 6 0 0 1-6 6H4"/><path d="M7 8l2 2-2 2M17 12l-2 2 2 2"/></svg>`,
+  shield:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4-2.5 7.5-7 9-4.5-1.5-7-5-7-9V6l7-3z"/></svg>`,
+  radar:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2v4M2 12h4M12 22v-4M22 12h-4"/><path d="M12 12l6-6"/></svg>`,
+  droplet:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s7 7 7 12a7 7 0 0 1-14 0c0-5 7-12 7-12z"/></svg>`,
+  flask:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v6l-5 9a4 4 0 0 0 3.5 6h7a4 4 0 0 0 3.5-6l-5-9V2"/><path d="M8 10h8"/></svg>`,
+  crack:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 12 4l2 6 6 2-8 8-2-6-6-2z"/></svg>`,
+  layers:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 5-9 5-9-5 9-5z"/><path d="M3 12l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg>`,
+  terrain:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l6-4 4 2 8-6 0 8H3z"/><path d="M3 12l6-4 4 2 8-6"/></svg>`,
+  flow:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8c3 0 3-4 6-4s3 4 6 4 3-4 6-4"/><path d="M3 16c3 0 3-4 6-4s3 4 6 4 3-4 6-4"/></svg>`,
+  wave:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c3 0 3-4 6-4s3 4 6 4 3-4 6-4"/><path d="M2 17c3 0 3-4 6-4s3 4 6 4 3-4 6-4"/></svg>`,
+  aura:`<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#7ef2ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="6"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>`,
+};
+/* Orbits & items */
+const ORBITS = [
+  {name:"Optimization", speed:0.55, items:[
+    {n:"Sypher", i:"gear"},
+    {n:"Wellwatch", i:"eye"},
+    {n:"Wellnova", i:"loop"},
+    {n:"WellGuard", i:"shield"},
+    {n:"FlowGuard", i:"flow"},
+  ]},
+  {name:"Analysis & Enhancement", speed:0.38, items:[
+    {n:"Prodcast", i:"radar"},
+    {n:"AquaMan", i:"droplet"},
+    {n:"StimAtlas", i:"flask"},
+    {n:"FracGuard", i:"crack"},
+    {n:"GeaGuard", i:"layers"},
+    {n:"TerraGuard", i:"terrain"},
+  ]},
+  {name:"Monitoring & KPI", speed:0.26, items:[
+    {n:"KPI Monitoring", i:"chart"},
+    {n:"Health Check Dashboard", i:"health"},
+    {n:"Decline Curve", i:"trend"},
+    {n:"RSP/RESM Gain", i:"barsUp"},
+    {n:"Shareholders RESM", i:"brief"},
+    {n:"Daily Reservoir Performance Report", i:"report"},
+    {n:"Pattern Flood Management", i:"wave"},
+    {n:"Aura", i:"aura"},
+  ]},
+];
+const system = document.getElementById('system');
+const tiltRange = document.getElementById('tiltRange');
+let tilt = parseFloat(tiltRange.value) * Math.PI/180;
+tiltRange.addEventListener('input', ()=>{
+  tilt = parseFloat(tiltRange.value) * Math.PI/180;
+  document.querySelectorAll('.orbit').forEach(o=> o.style.setProperty('--tilt', tiltRange.value+'deg'));
+});
+/* Build nodes */
+const nodes = [];
+const ringPhase = [0.0, 0.3, 0.6];
+ORBITS.forEach((ring, ri)=>{
+  ring.items.forEach((it, idx)=>{
+    const el = document.createElement('div');
+    el.className = 'planet';
+    el.innerHTML = I[it.i] + `<span class="label">${it.n}</span>`;
+    system.appendChild(el);
+    nodes.push({el, ring:ri, slot:idx});
+  });
+});
+/* Layout helpers */
+function ellipseSizes(){
+  const size = Math.min(system.clientWidth, system.clientHeight);
+  return [
+    {a:size*0.34, b:size*0.26},
+    {a:size*0.45, b:size*0.33},
+    {a:size*0.58, b:size*0.42},
+  ];
+}
+let ellipses = ellipseSizes();
+/* Animation — keep icons upright */
+let speedScale = 1.0, paused=false;
+function animate(now){
+  if(!paused){
+    const cx = system.clientWidth/2, cy = system.clientHeight/2;
+    nodes.forEach(n=>{
+      const ring = ORBITS[n.ring];
+      const total = ring.items.length;
+      const base = (n.slot / total) * Math.PI*2;
+      const omega = ring.speed * speedScale * (n.ring%2===0?1:-1);
+      const t = base + ringPhase[n.ring] + omega * (now/1000);
+      const a = ellipses[n.ring].a, b = ellipses[n.ring].b;
+      let x = a * Math.cos(t), y = b * Math.sin(t);
+      const xt = x * Math.cos(tilt) - y * Math.sin(tilt);
+      const yt = x * Math.sin(tilt) + y * Math.cos(tilt);
+      n.el.style.transform = `translate(${cx + xt - n.el.offsetWidth/2}px, ${cy + yt - n.el.offsetHeight/2}px)`;
+    });
+  }
+  requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+addEventListener('resize', ()=>{ ellipses = ellipseSizes(); });
+/* Controls */
+document.getElementById('pauseBtn').onclick=()=>{ paused=!paused; document.getElementById('pauseBtn').textContent = paused? 'Resume':'Pause'; };
+document.getElementById('slowBtn').onclick=()=>{ speedScale=0.6; };
+document.getElementById('normalBtn').onclick=()=>{ speedScale=1.0; };
+document.getElementById('fastBtn').onclick=()=>{ speedScale=1.7; };
+/* Export */
+document.getElementById('exportBtn').onclick=()=>{
+  const node = document.querySelector('.system');
+  const w = node.offsetWidth, h = node.offsetHeight;
+  const data = new XMLSerializer().serializeToString(node);
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='${h}'>
+    <foreignObject width='100%' height='100%'>${data}</foreignObject></svg>`;
+  const url = URL.createObjectURL(new Blob([svg],{type:'image/svg+xml;charset=utf-8'}));
+  const img = new Image(); img.onload = function(){
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const ctx = c.getContext('2d'); ctx.fillStyle = getComputedStyle(document.body).backgroundColor || '#060a13'; ctx.fillRect(0,0,w,h);
+    ctx.drawImage(img,0,0); URL.revokeObjectURL(url);
+    const a = document.createElement('a'); a.download = 'rmo-cosmo-galaxy.png'; a.href = c.toDataURL('image/png'); a.click();
+  }; img.src = url;
+};
+</script>
+</body>
+</html>
