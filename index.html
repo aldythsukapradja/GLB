@@ -1,1 +1,122 @@
-<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>RMO Cosmo — Reservoir Galaxy (v6)</title><link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap' rel='stylesheet'><style>:root{--bg0:#060a13;--bg1:#0a1426;--text:#e7f2ff;--muted:#9db0cc;--guards:#7ef2ff;--observers:#9a8bff;--actions:#53f2c6}*{box-sizing:border-box}html,body{height:100%}body{margin:0;color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:radial-gradient(1200px 800px at 70% -10%,rgba(88,170,255,.22),transparent 60%),radial-gradient(1200px 800px at -20% 40%,rgba(78,255,228,.12),transparent 60%),linear-gradient(180deg,var(--bg0),var(--bg1));overflow:hidden}.header{position:fixed;inset:0 0 auto 0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;background:linear-gradient(180deg,rgba(10,19,36,.75),rgba(10,19,36,0))}.brand{display:flex;align-items:center;gap:10px;font-weight:800}.controls{display:flex;gap:8px;flex-wrap:wrap}.btn{appearance:none;border:1px solid rgba(126,242,255,.25);background:rgba(126,242,255,.08);color:var(--text);font-weight:700;border-radius:12px;padding:10px 12px;cursor:pointer}.btn.primary{background:linear-gradient(90deg,var(--guards),#3fd0ff);color:#04121a;box-shadow:0 10px 40px rgba(63,208,255,.35)}.stage{position:absolute;inset:0;display:grid;place-items:center;padding-top:44px}.system{position:relative;width:min(1200px,95vmin);aspect-ratio:1/1;border-radius:50%}.core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:26%;aspect-ratio:1/1;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(126,242,255,.95) 0%,rgba(63,208,255,.75) 18%,rgba(10,35,48,1) 65%),conic-gradient(from 180deg at 50% 50%,rgba(63,208,255,.25),rgba(126,242,255,.05),rgba(63,208,255,.25));border:1px solid rgba(126,242,255,.35);box-shadow:0 0 70px rgba(126,242,255,.55),0 0 180px rgba(63,208,255,.35),inset 0 0 50px rgba(126,242,255,.25)}.orbit{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(var(--tilt));border-radius:50%;border:1px dashed rgba(126,242,255,.2);pointer-events:none}.r2{width:72%;height:54%;border-color:rgba(154,139,255,.35)}.r3{width:92%;height:68%;border-color:rgba(83,242,198,.35)}.planet{position:absolute;width:70px;height:70px;border-radius:16px;display:grid;place-items:center;background:rgba(8,20,32,.6);border:1px solid rgba(126,242,255,.35);box-shadow:0 0 34px rgba(126,242,255,.4);transition:transform .15s ease}.planet[data-cat='guard']{border-color:var(--guards)}.planet[data-cat='observer']{border-color:var(--observers)}.planet[data-cat='action']{border-color:var(--actions)}.planet:hover{transform:scale(1.06)}.label{position:absolute;top:82px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--muted);white-space:nowrap}</style></head><body><div class='header'><div class='brand'><span style='display:inline-block;width:10px;height:10px;border-radius:50%;background:linear-gradient(90deg,#7ef2ff,#3fd0ff);box-shadow:0 0 12px #7ef2ff88,0 0 28px #3fd0ff55'></span><div style='display:grid;line-height:1'><span style='font-weight:800'>RMO Cosmo</span><small style='opacity:.8'>Guards center • Observers • Actions</small></div></div><div class='controls'><button id='pauseBtn' class='btn'>Pause</button><button id='slowBtn' class='btn'>Slow</button><button id='normalBtn' class='btn primary'>Normal</button><button id='fastBtn' class='btn'>Fast</button><label style='color:#9db0cc'>Tilt <input id='tiltRange' type='range' min='-45' max='45' value='18'></label></div></div><div class='stage'><div class='system' id='system'><div class='core' aria-label='Collaboration core'></div><div class='orbit r2' style='--tilt:18deg'></div><div class='orbit r3' style='--tilt:18deg'></div></div></div><script>const guards=['WellGuard','FlowGuard','FracGuard','GeaGuard','TerraGuard'];const observers=['KPI Monitoring','Health Check Dashboard','Decline Curve','RSP/RESM Gain','Shareholders RESM','Daily Reservoir Performance Report','Wellwatch','Prodcast','Aura'];const actions=['Sypher','Wellnova','AquaMan','StimAtlas','Pattern Flood Management'];const ORBITS=[{cat:'observer',speed:0.32,items:observers},{cat:'action',speed:0.44,items:actions}];const system=document.getElementById('system');const tiltRange=document.getElementById('tiltRange');let tilt=parseFloat(tiltRange.value)*Math.PI/180;tiltRange.addEventListener('input',()=>{tilt=parseFloat(tiltRange.value)*Math.PI/180;document.querySelectorAll('.orbit').forEach(o=>o.style.setProperty('--tilt',tiltRange.value+'deg'))});function placeGuard(text,angle,radiusA,radiusB,tiltDeg){const tilt=tiltDeg*Math.PI/180;const x=radiusA*Math.cos(angle),y=radiusB*Math.sin(angle);const xt=x*Math.cos(tilt)-y*Math.sin(tilt);const yt=x*Math.sin(tilt)+y*Math.cos(tilt);const el=document.createElement('div');el.className='planet';el.dataset.cat='guard';el.style.width='78px';el.style.height='78px';el.innerHTML=`<span class="label" style="top:88px">${text}</span>`;system.appendChild(el);const cx=system.clientWidth/2,cy=system.clientHeight/2;el.style.transform=`translate(${cx+xt-39}px, ${cy+yt-39}px)`}const guardAngles=[0,1.2,2.3,3.7,5.1];guardAngles.forEach((a,i)=>placeGuard(guards[i],a,system.clientWidth*0.16,system.clientHeight*0.12,18));const nodes=[];const phases=[0.15,0.45];const ringA=[0.42,0.56],ringB=[0.32,0.42];ORBITS.forEach((ring,ri)=>{ring.items.forEach((name,idx)=>{const el=document.createElement('div');el.className='planet';el.dataset.cat=ring.cat;el.innerHTML=`<span class="label">${name}</span>`;system.appendChild(el);nodes.push({el,ring:ri,slot:idx})})});function sizes(){const w=system.clientWidth,h=system.clientHeight;return[{a:w*ringA[0],b:h*ringB[0]},{a:w*ringA[1],b:h*ringB[1]}]}let ellipses=sizes();let paused=false,speedScale=1.0;function animate(now){if(!paused){const cx=system.clientWidth/2,cy=system.clientHeight/2;nodes.forEach(n=>{const ring=ORBITS[n.ring];const total=ring.items.length;const base=n.slot/total*Math.PI*2;const omega=ring.speed*speedScale*(n.ring%2===0?1:-1);const t=base+phases[n.ring]+omega*(now/1000);const a=ellipses[n.ring].a,b=ellipses[n.ring].b;let x=a*Math.cos(t),y=b*Math.sin(t);const xt=x*Math.cos(tilt)-y*Math.sin(tilt);const yt=x*Math.sin(tilt)+y*Math.cos(tilt);n.el.style.transform=`translate(${cx+xt-n.el.offsetWidth/2}px, ${cy+yt-n.el.offsetHeight/2}px)`})}requestAnimationFrame(animate)}requestAnimationFrame(animate);window.addEventListener('resize',()=>ellipses=sizes());document.getElementById('pauseBtn').onclick=()=>{paused=!paused;document.getElementById('pauseBtn').textContent=paused?'Resume':'Pause'};document.getElementById('slowBtn').onclick=()=>speedScale=0.6;document.getElementById('normalBtn').onclick=()=>speedScale=1.0;document.getElementById('fastBtn').onclick=()=>speedScale=1.6;</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RMO Cosmo — Reservoir Galaxy (v6)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg0:#060a13;--bg1:#0a1426;--text:#e7f2ff;--muted:#9db0cc;
+  --guards:#7ef2ff;--observers:#9a8bff;--actions:#53f2c6;
+}
+*{box-sizing:border-box}html,body{height:100%}
+body{
+  margin:0;color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+  background:
+    radial-gradient(1200px 800px at 70% -10%,rgba(88,170,255,.22),transparent 60%),
+    radial-gradient(1200px 800px at -20% 40%,rgba(78,255,228,.12),transparent 60%),
+    linear-gradient(180deg,var(--bg0),var(--bg1));
+  overflow:hidden;
+}
+.header{position:fixed;inset:0 0 auto 0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;background:linear-gradient(180deg,rgba(10,19,36,.75),rgba(10,19,36,0));}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.btn{appearance:none;border:1px solid rgba(126,242,255,.25);background:rgba(126,242,255,.08);color:var(--text);font-weight:700;border-radius:12px;padding:10px 12px;cursor:pointer}
+.btn.primary{background:linear-gradient(90deg,var(--guards),#3fd0ff);color:#04121a;box-shadow:0 10px 40px rgba(63,208,255,.35)}
+.stage{position:absolute;inset:0;display:grid;place-items:center;padding-top:44px}
+.system{position:relative;width:min(1200px,95vmin);aspect-ratio:1/1;border-radius:50%}
+.core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:26%;aspect-ratio:1/1;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,rgba(126,242,255,.95) 0%,rgba(63,208,255,.75) 18%,rgba(10,35,48,1) 65%),
+             conic-gradient(from 180deg at 50% 50%,rgba(63,208,255,.25),rgba(126,242,255,.05),rgba(63,208,255,.25));
+  border:1px solid rgba(126,242,255,.35);
+  box-shadow:0 0 70px rgba(126,242,255,.55),0 0 180px rgba(63,208,255,.35),inset 0 0 50px rgba(126,242,255,.25);}
+.orbit{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(var(--tilt));border-radius:50%;border:1px dashed rgba(126,242,255,.2);pointer-events:none}
+.r2{width:72%;height:54%;border-color:rgba(154,139,255,.35)}
+.r3{width:92%;height:68%;border-color:rgba(83,242,198,.35)}
+.planet{position:absolute;width:70px;height:70px;border-radius:16px;display:grid;place-items:center;background:rgba(8,20,32,.6);
+  border:1px solid rgba(126,242,255,.35);box-shadow:0 0 34px rgba(126,242,255,.4);transition:transform .15s ease}
+.planet[data-cat="guard"]{border-color:var(--guards)}
+.planet[data-cat="observer"]{border-color:var(--observers)}
+.planet[data-cat="action"]{border-color:var(--actions)}
+.planet:hover{transform:scale(1.06)}
+.label{position:absolute;top:82px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--muted);white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="brand">
+    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:linear-gradient(90deg,#7ef2ff,#3fd0ff);box-shadow:0 0 12px #7ef2ff88,0 0 28px #3fd0ff55"></span>
+    <div style="display:grid;line-height:1">
+      <span style="font-weight:800">RMO Cosmo</span>
+      <small style="opacity:.8">Guards center • Observers • Actions</small>
+    </div>
+  </div>
+  <div class="controls">
+    <button id="pauseBtn" class="btn">Pause</button>
+    <button id="slowBtn" class="btn">Slow</button>
+    <button id="normalBtn" class="btn primary">Normal</button>
+    <button id="fastBtn" class="btn">Fast</button>
+    <label style="color:#9db0cc">Tilt <input id="tiltRange" type="range" min="-45" max="45" value="18"></label>
+  </div>
+</div>
+<div class="stage">
+  <div class="system" id="system">
+    <div class="core" aria-label="Collaboration core"></div>
+    <div class="orbit r2" style="--tilt:18deg"></div>
+    <div class="orbit r3" style="--tilt:18deg"></div>
+  </div>
+</div>
+<script>
+const guards=["WellGuard","FlowGuard","FracGuard","GeaGuard","TerraGuard"];
+const observers=["KPI Monitoring","Health Check Dashboard","Decline Curve","RSP/RESM Gain","Shareholders RESM","Daily Reservoir Performance Report","Wellwatch","Prodcast","Aura"];
+const actions=["Sypher","Wellnova","AquaMan","StimAtlas","Pattern Flood Management"];
+const ORBITS=[{cat:"observer",speed:0.32,items:observers},{cat:"action",speed:0.44,items:actions}];
+const system=document.getElementById("system");
+const tiltRange=document.getElementById("tiltRange");
+let tilt=parseFloat(tiltRange.value)*Math.PI/180;
+tiltRange.addEventListener("input",()=>{tilt=parseFloat(tiltRange.value)*Math.PI/180;document.querySelectorAll(".orbit").forEach(o=>o.style.setProperty("--tilt",tiltRange.value+"deg"))});
+function placeGuard(text,angle,radiusA,radiusB,tiltDeg){
+  const tilt=tiltDeg*Math.PI/180;
+  const x=radiusA*Math.cos(angle),y=radiusB*Math.sin(angle);
+  const xt=x*Math.cos(tilt)-y*Math.sin(tilt);
+  const yt=x*Math.sin(tilt)+y*Math.cos(tilt);
+  const el=document.createElement("div");
+  el.className="planet";el.dataset.cat="guard";el.style.width="78px";el.style.height="78px";
+  el.innerHTML=`<span class="label" style="top:88px">${text}</span>`;
+  system.appendChild(el);
+  const cx=system.clientWidth/2,cy=system.clientHeight/2;
+  el.style.transform=`translate(${cx+xt-39}px,${cy+yt-39}px)`;
+}
+const guardAngles=[0,1.2,2.3,3.7,5.1];
+guardAngles.forEach((a,i)=>placeGuard(guards[i],a,system.clientWidth*0.16,system.clientHeight*0.12,18));
+const nodes=[];const phases=[0.15,0.45];
+const ringA=[0.42,0.56],ringB=[0.32,0.42];
+ORBITS.forEach((ring,ri)=>{ring.items.forEach((name,idx)=>{const el=document.createElement("div");el.className="planet";el.dataset.cat=ring.cat;el.innerHTML=`<span class="label">${name}</span>`;system.appendChild(el);nodes.push({el,ring:ri,slot:idx})})});
+function sizes(){const w=system.clientWidth,h=system.clientHeight;return[{a:w*ringA[0],b:h*ringB[0]},{a:w*ringA[1],b:h*ringB[1]}]}
+let ellipses=sizes();let paused=false,speedScale=1.0;
+function animate(now){
+ if(!paused){
+  const cx=system.clientWidth/2,cy=system.clientHeight/2;
+  nodes.forEach(n=>{
+    const ring=ORBITS[n.ring],total=ring.items.length;
+    const base=(n.slot/total)*Math.PI*2;
+    const omega=ring.speed*speedScale*(n.ring%2===0?1:-1);
+    const t=base+phases[n.ring]+omega*(now/1000);
+    const a=ellipses[n.ring].a,b=ellipses[n.ring].b;
+    let x=a*Math.cos(t),y=b*Math.sin(t);
+    const xt=x*Math.cos(tilt)-y*Math.sin(tilt);
+    const yt=x*Math.sin(tilt)+y*Math.cos(tilt);
+    n.el.style.transform=`translate(${cx+xt-n.el.offsetWidth/2}px,${cy+yt-n.el.offsetHeight/2}px)`;
+  });
+ }
+ requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+window.addEventListener("resize",()=>ellipses=sizes());
+document.getElementById("pauseBtn").onclick=()=>{paused=!paused;document.getElementById("pauseBtn").textContent=paused?"Resume":"Pause"};
+document.getElementById("slowBtn").onclick=()=>speedScale=0.6;
+document.getElementById("normalBtn").onclick=()=>speedScale=1.0;
+document.getElementById("fastBtn").onclick=()=>speedScale=1.6;
+</script>
+</body></html>
