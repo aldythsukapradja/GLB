@@ -3,44 +3,52 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RMO Cosmo — Reservoir Galaxy (v6)</title>
+<title>RMO Cosmo — Milky Way Dust Galaxy (v7)</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg0:#060a13;--bg1:#0a1426;--text:#e7f2ff;--muted:#9db0cc;
-  --guards:#7ef2ff;--observers:#9a8bff;--actions:#53f2c6;
+  --bg:#05070d; --text:#e7f2ff; --muted:#9db0cc;
+  --guard:#7ef2ff; --obs:#9a8bff; --act:#53f2c6;
 }
-*{box-sizing:border-box}html,body{height:100%}
+*{box-sizing:border-box} html,body{height:100%}
 body{
-  margin:0;color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-  background:
-    radial-gradient(1200px 800px at 70% -10%,rgba(88,170,255,.22),transparent 60%),
-    radial-gradient(1200px 800px at -20% 40%,rgba(78,255,228,.12),transparent 60%),
-    linear-gradient(180deg,var(--bg0),var(--bg1));
+  margin:0; color:var(--text); font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+  background: radial-gradient(1200px 800px at 65% -10%, rgba(88,170,255,.18), transparent 60%), var(--bg);
   overflow:hidden;
 }
-.header{position:fixed;inset:0 0 auto 0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;background:linear-gradient(180deg,rgba(10,19,36,.75),rgba(10,19,36,0));}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800}
-.controls{display:flex;gap:8px;flex-wrap:wrap}
-.btn{appearance:none;border:1px solid rgba(126,242,255,.25);background:rgba(126,242,255,.08);color:var(--text);font-weight:700;border-radius:12px;padding:10px 12px;cursor:pointer}
-.btn.primary{background:linear-gradient(90deg,var(--guards),#3fd0ff);color:#04121a;box-shadow:0 10px 40px rgba(63,208,255,.35)}
-.stage{position:absolute;inset:0;display:grid;place-items:center;padding-top:44px}
-.system{position:relative;width:min(1200px,95vmin);aspect-ratio:1/1;border-radius:50%}
-.core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:26%;aspect-ratio:1/1;border-radius:50%;
-  background:radial-gradient(circle at 35% 35%,rgba(126,242,255,.95) 0%,rgba(63,208,255,.75) 18%,rgba(10,35,48,1) 65%),
-             conic-gradient(from 180deg at 50% 50%,rgba(63,208,255,.25),rgba(126,242,255,.05),rgba(63,208,255,.25));
-  border:1px solid rgba(126,242,255,.35);
-  box-shadow:0 0 70px rgba(126,242,255,.55),0 0 180px rgba(63,208,255,.35),inset 0 0 50px rgba(126,242,255,.25);}
-.orbit{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(var(--tilt));border-radius:50%;border:1px dashed rgba(126,242,255,.2);pointer-events:none}
-.r2{width:72%;height:54%;border-color:rgba(154,139,255,.35)}
-.r3{width:92%;height:68%;border-color:rgba(83,242,198,.35)}
-.planet{position:absolute;width:70px;height:70px;border-radius:16px;display:grid;place-items:center;background:rgba(8,20,32,.6);
-  border:1px solid rgba(126,242,255,.35);box-shadow:0 0 34px rgba(126,242,255,.4);transition:transform .15s ease}
-.planet[data-cat="guard"]{border-color:var(--guards)}
-.planet[data-cat="observer"]{border-color:var(--observers)}
-.planet[data-cat="action"]{border-color:var(--actions)}
-.planet:hover{transform:scale(1.06)}
-.label{position:absolute;top:82px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--muted);white-space:nowrap}
+.header{ position:fixed; inset:0 0 auto 0; z-index:10; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 14px;
+  background: linear-gradient(180deg, rgba(10,19,36,.75), rgba(10,19,36,0)); }
+.brand{ display:flex; align-items:center; gap:10px; font-weight:800 }
+.controls{ display:flex; gap:8px; flex-wrap:wrap }
+.btn{ appearance:none; border:1px solid rgba(126,242,255,.25); background: rgba(126,242,255,.08); color:var(--text);
+  font-weight:700; border-radius:12px; padding:10px 12px; cursor:pointer }
+.btn.primary{ background: linear-gradient(90deg,var(--guard),#3fd0ff); color:#04121a; box-shadow: 0 10px 40px rgba(63,208,255,.35) }
+label{ color:var(--muted); font-size:13px; display:flex; gap:6px; align-items:center }
+input[type=range]{ accent-color:#3fd0ff }
+
+.stage{ position:absolute; inset:0; display:grid; place-items:center; padding-top:44px }
+.layer{ position:relative; width:min(1200px, 95vmin); aspect-ratio:1/1 }
+#space{ position:absolute; inset:0; border-radius:50%; }
+.system{ position:absolute; inset:0; border-radius:50% }
+
+.core{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:24%; aspect-ratio:1/1; border-radius:50%;
+  background: radial-gradient(circle at 40% 40%, rgba(255,255,255,.95), rgba(190,240,255,.6) 30%, rgba(10,30,45,.9) 68%);
+  box-shadow: 0 0 120px rgba(255,255,255,.45), 0 0 260px rgba(150,180,255,.25), inset 0 0 60px rgba(255,255,255,.28);
+  border:1px solid rgba(255,255,255,.25);
+}
+
+.planet{ position:absolute; width:70px; height:70px; border-radius:16px; display:grid; place-items:center;
+  background: rgba(8,20,32,.65); border:1px solid rgba(126,242,255,.35); box-shadow: 0 0 34px rgba(126,242,255,.35);
+  transition: transform .15s ease; will-change: transform; }
+.planet:hover{ transform: scale(1.06) }
+.planet[data-cat="guard"]{ border-color: var(--guard) }
+.planet[data-cat="observer"]{ border-color: var(--obs) }
+.planet[data-cat="action"]{ border-color: var(--act) }
+.label{ position:absolute; top:82px; left:50%; transform:translateX(-50%); font-size:12px; color:var(--muted); white-space:nowrap }
+@media (max-width: 900px){ .planet{ width:62px; height:62px } .label{ top:74px } }
+@media (max-width: 560px){ .planet{ width:54px; height:54px } .label{ display:none } }
 </style>
 </head>
 <body>
@@ -57,66 +65,181 @@ body{
     <button id="slowBtn" class="btn">Slow</button>
     <button id="normalBtn" class="btn primary">Normal</button>
     <button id="fastBtn" class="btn">Fast</button>
-    <label style="color:#9db0cc">Tilt <input id="tiltRange" type="range" min="-45" max="45" value="18"></label>
+    <label>Tilt <input id="tiltRange" type="range" min="-35" max="35" value="18"></label>
+    <label>Glow <input id="glowRange" type="range" min="0.4" max="1.6" step="0.1" value="1.0"></label>
   </div>
 </div>
+
 <div class="stage">
-  <div class="system" id="system">
-    <div class="core" aria-label="Collaboration core"></div>
-    <div class="orbit r2" style="--tilt:18deg"></div>
-    <div class="orbit r3" style="--tilt:18deg"></div>
+  <div class="layer" id="layer">
+    <canvas id="space"></canvas>
+    <div class="system" id="system">
+      <div class="core"></div>
+    </div>
   </div>
 </div>
+
 <script>
-const guards=["WellGuard","FlowGuard","FracGuard","GeaGuard","TerraGuard"];
-const observers=["KPI Monitoring","Health Check Dashboard","Decline Curve","RSP/RESM Gain","Shareholders RESM","Daily Reservoir Performance Report","Wellwatch","Prodcast","Aura"];
-const actions=["Sypher","Wellnova","AquaMan","StimAtlas","Pattern Flood Management"];
-const ORBITS=[{cat:"observer",speed:0.32,items:observers},{cat:"action",speed:0.44,items:actions}];
-const system=document.getElementById("system");
-const tiltRange=document.getElementById("tiltRange");
-let tilt=parseFloat(tiltRange.value)*Math.PI/180;
-tiltRange.addEventListener("input",()=>{tilt=parseFloat(tiltRange.value)*Math.PI/180;document.querySelectorAll(".orbit").forEach(o=>o.style.setProperty("--tilt",tiltRange.value+"deg"))});
-function placeGuard(text,angle,radiusA,radiusB,tiltDeg){
-  const tilt=tiltDeg*Math.PI/180;
-  const x=radiusA*Math.cos(angle),y=radiusB*Math.sin(angle);
-  const xt=x*Math.cos(tilt)-y*Math.sin(tilt);
-  const yt=x*Math.sin(tilt)+y*Math.cos(tilt);
-  const el=document.createElement("div");
-  el.className="planet";el.dataset.cat="guard";el.style.width="78px";el.style.height="78px";
-  el.innerHTML=`<span class="label" style="top:88px">${text}</span>`;
-  system.appendChild(el);
-  const cx=system.clientWidth/2,cy=system.clientHeight/2;
-  el.style.transform=`translate(${cx+xt-39}px,${cy+yt-39}px)`;
+/* ---------- Your data ---------- */
+const guards = ["WellGuard","FlowGuard","FracGuard","GeaGuard","TerraGuard"];
+const observers = ["KPI Monitoring","Health Check Dashboard","Decline Curve","RSP/RESM Gain","Shareholders RESM","Daily Reservoir Performance Report","Wellwatch","Prodcast","Aura"];
+const actions = ["Sypher","Wellnova","AquaMan","StimAtlas","Pattern Flood Management"];
+
+/* ---------- Canvas dust rings (Milky Way) ---------- */
+const canvas = document.getElementById('space');
+const ctx = canvas.getContext('2d');
+const layer = document.getElementById('layer');
+
+let tilt = 18 * Math.PI/180, glowScale = 1.0;
+function resizeCanvas(){
+  const s = Math.min(layer.clientWidth, layer.clientHeight);
+  canvas.width = s; canvas.height = s;
 }
-const guardAngles=[0,1.2,2.3,3.7,5.1];
-guardAngles.forEach((a,i)=>placeGuard(guards[i],a,system.clientWidth*0.16,system.clientHeight*0.12,18));
-const nodes=[];const phases=[0.15,0.45];
-const ringA=[0.42,0.56],ringB=[0.32,0.42];
-ORBITS.forEach((ring,ri)=>{ring.items.forEach((name,idx)=>{const el=document.createElement("div");el.className="planet";el.dataset.cat=ring.cat;el.innerHTML=`<span class="label">${name}</span>`;system.appendChild(el);nodes.push({el,ring:ri,slot:idx})})});
-function sizes(){const w=system.clientWidth,h=system.clientHeight;return[{a:w*ringA[0],b:h*ringB[0]},{a:w*ringA[1],b:h*ringB[1]}]}
-let ellipses=sizes();let paused=false,speedScale=1.0;
-function animate(now){
- if(!paused){
-  const cx=system.clientWidth/2,cy=system.clientHeight/2;
-  nodes.forEach(n=>{
-    const ring=ORBITS[n.ring],total=ring.items.length;
-    const base=(n.slot/total)*Math.PI*2;
-    const omega=ring.speed*speedScale*(n.ring%2===0?1:-1);
-    const t=base+phases[n.ring]+omega*(now/1000);
-    const a=ellipses[n.ring].a,b=ellipses[n.ring].b;
-    let x=a*Math.cos(t),y=b*Math.sin(t);
-    const xt=x*Math.cos(tilt)-y*Math.sin(tilt);
-    const yt=x*Math.sin(tilt)+y*Math.cos(tilt);
-    n.el.style.transform=`translate(${cx+xt-n.el.offsetWidth/2}px,${cy+yt-n.el.offsetHeight/2}px)`;
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+// Create particles around an ellipse with jitter
+function makeRingParticles(aFrac, bFrac, count, hue, colorJitter=10, sizeRange=[1,3], alpha=0.9){
+  const w = canvas.width, h = canvas.height, cx = w/2, cy = h/2;
+  const a = (w/2) * aFrac, b = (h/2) * bFrac;
+  const tiltC = Math.cos(tilt), tiltS = Math.sin(tilt);
+  const parts = [];
+  for(let i=0;i<count;i++){
+    const t = Math.random()*Math.PI*2;
+    const jr = (Math.random() - 0.5) * 0.09; // +-9% radial jitter
+    const x0 = a*(1+jr)*Math.cos(t);
+    const y0 = b*(1+jr)*Math.sin(t);
+    const x = x0*tiltC - y0*tiltS;
+    const y = x0*tiltS + y0*tiltC;
+    const s = sizeRange[0] + Math.random()*(sizeRange[1]-sizeRange[0]);
+    const hJ = hue + (Math.random()*2-1)*colorJitter;
+    parts.push({x:cx+x, y:cy+y, size:s, hue:hJ, alpha:alpha*(0.7+0.3*Math.random())});
+  }
+  return {aFrac,bFrac, hue, particles:parts};
+}
+
+// Three rings: inner bright white, middle violet, outer blue
+let rings = [
+  makeRingParticles(0.36, 0.26, 1400, 0,   5, [1.2,3.4], 1.0),
+  makeRingParticles(0.52, 0.36, 1800, 260,12, [1.1,2.8], 0.9),
+  makeRingParticles(0.70, 0.48, 2200, 220,14, [1.1,2.6], 0.85)
+];
+
+let paused = false, speed = 1.0;
+function redraw(){
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+  ctx.globalCompositeOperation = 'lighter';
+  rings.forEach((ring, ri)=>{
+    ring.particles.forEach(p=>{
+      ctx.beginPath();
+      const r = p.size * (1.6 * glowScale);
+      const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r*2.8);
+      const hue = ri===0? 0 : p.hue;
+      grd.addColorStop(0, `rgba(255,255,255,${0.90*p.alpha})`);
+      grd.addColorStop(0.45, `hsla(${hue}, 90%, 70%, ${0.45*p.alpha})`);
+      grd.addColorStop(1, `hsla(${hue}, 90%, 55%, 0)`);
+      ctx.fillStyle = grd;
+      ctx.arc(p.x, p.y, r, 0, Math.PI*2);
+      ctx.fill();
+    });
   });
- }
- requestAnimationFrame(animate);
+  ctx.globalCompositeOperation = 'source-over';
 }
-requestAnimationFrame(animate);
-window.addEventListener("resize",()=>ellipses=sizes());
-document.getElementById("pauseBtn").onclick=()=>{paused=!paused;document.getElementById("pauseBtn").textContent=paused?"Resume":"Pause"};
-document.getElementById("slowBtn").onclick=()=>speedScale=0.6;
-document.getElementById("normalBtn").onclick=()=>speedScale=1.0;
-document.getElementById("fastBtn").onclick=()=>speedScale=1.6;
+
+function animate(){
+  if(!paused){
+    // rotate rings slowly in alternating directions
+    rings.forEach((ring, ri)=>{
+      const w = canvas.width, h = canvas.height, cx = w/2, cy = h/2;
+      const rot = (ri===0? 0.00015 : ri===1? 0.00010 : -0.00008) * speed;
+      const s = Math.sin(rot), c = Math.cos(rot);
+      ring.particles.forEach(p=>{
+        const dx = p.x - cx, dy = p.y - cy;
+        p.x = cx + dx*c - dy*s;
+        p.y = cy + dx*s + dy*c;
+      });
+    });
+    redraw();
+  }
+  requestAnimationFrame(animate);
+}
+redraw(); requestAnimationFrame(animate);
+
+/* ---------- Icons (upright) ---------- */
+const system = document.getElementById('system');
+
+function placeCluster(names, aFrac, bFrac, tiltDeg){
+  const cx = system.clientWidth/2, cy = system.clientHeight/2;
+  const w = system.clientWidth, h = system.clientHeight;
+  const a = w*aFrac, b = h*bFrac;
+  const t = tiltDeg*Math.PI/180, c = Math.cos(t), s = Math.sin(t);
+  names.forEach((name,i)=>{
+    const ang = i*(Math.PI*2/names.length) + 0.4;
+    const x0 = a*Math.cos(ang), y0 = b*Math.sin(ang);
+    const x = x0*c - y0*s, y = x0*s + y0*c;
+    const el = document.createElement('div');
+    el.className = 'planet'; el.dataset.cat = 'guard';
+    el.innerHTML = `<span class="label">${name}</span>`;
+    system.appendChild(el);
+    el.style.transform = `translate(${cx + x - el.offsetWidth/2}px, ${cy + y - el.offsetHeight/2}px)`;
+  });
+}
+
+function buildOrbit(names, aFrac, bFrac, cat, dir, speedOrbit, phase){
+  const nodes = [];
+  names.forEach((n,i)=>{
+    const el = document.createElement('div');
+    el.className = 'planet'; el.dataset.cat = cat;
+    el.innerHTML = `<span class="label">${n}</span>`;
+    system.appendChild(el);
+    nodes.push({el, slot:i});
+  });
+  const cx = system.clientWidth/2, cy = system.clientHeight/2;
+  function tick(now){
+    if(!paused){
+      const w = system.clientWidth, h = system.clientHeight;
+      const a = w*aFrac, b = h*bFrac;
+      const t = parseFloat(document.getElementById('tiltRange').value)*Math.PI/180;
+      const c = Math.cos(t), s = Math.sin(t);
+      nodes.forEach(n=>{
+        const base = (n.slot/nodes.length)*Math.PI*2 + phase;
+        const ang  = base + dir * speedOrbit * speed * (now/1000);
+        const x0 = a*Math.cos(ang), y0 = b*Math.sin(ang);
+        const x = x0*c - y0*s, y = x0*s + y0*c;
+        n.el.style.transform = `translate(${cx + x - n.el.offsetWidth/2}px, ${cy + y - n.el.offsetHeight/2}px)`;
+      });
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// Guards cluster (center), Observers ring, Actions ring
+placeCluster(guards, 0.18, 0.12, 18);
+buildOrbit(observers, 0.46, 0.34, 'observer', +1, 0.28, 0.2);
+buildOrbit(actions,   0.60, 0.44, 'action',   -1, 0.38, 0.5);
+
+/* ---------- Controls ---------- */
+document.getElementById('pauseBtn').onclick = ()=>{ paused = !paused; document.getElementById('pauseBtn').textContent = paused? 'Resume' : 'Pause'; };
+document.getElementById('slowBtn').onclick  = ()=> speed = 0.6;
+document.getElementById('normalBtn').onclick= ()=> speed = 1.0;
+document.getElementById('fastBtn').onclick  = ()=> speed = 1.6;
+
+document.getElementById('tiltRange').addEventListener('input', e=>{
+  tilt = parseFloat(e.target.value)*Math.PI/180;
+  // rebuild dust rings with the new tilt so the glow bands follow the plane
+  rings = [
+    makeRingParticles(0.36, 0.26, 1400, 0,   5, [1.2,3.4], 1.0),
+    makeRingParticles(0.52, 0.36, 1800, 260,12, [1.1,2.8], 0.9),
+    makeRingParticles(0.70, 0.48, 2200, 220,14, [1.1,2.6], 0.85)
+  ];
+  redraw();
+});
+document.getElementById('glowRange').addEventListener('input', e=>{
+  glowScale = parseFloat(e.target.value);
+  redraw();
+});
 </script>
-</body></html>
+</body>
+</html>
