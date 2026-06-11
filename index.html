@@ -19,7 +19,21 @@
   --t-alpha:#E8453C; --t-beta:#2D7FF9; --t-gamma:#E8A33C; --t-delta:#27C26C;
   --r-lg:20px; --r-md:14px; --r-sm:10px;
   --safe-b:env(safe-area-inset-bottom,0px);
+  --glass:rgba(13,20,32,.88); --glow:0 0 30px rgba(212,146,10,.18);
 }
+html[data-theme="light"]{
+  --bg:#EEF1F7; --surface:#FFFFFF; --panel:#FFFFFF; --panel2:#F2F5FA;
+  --border:#C9D6E6; --border-soft:#E0E7F1;
+  --amber:#B97E06; --amber-hi:#A86F00; --cyan:#0584A6; --jade:#0E9C63;
+  --coral:#D8412B; --violet:#7C4DEF;
+  --text:#16202E; --muted:#5B6B82; --dim:#9AA9BE;
+  --glass:rgba(255,255,255,.88); --glow:0 6px 24px rgba(22,32,46,.08);
+}
+html.theming, html.theming *{transition:background-color .45s ease,color .45s ease,border-color .45s ease !important}
+/* instrument canvases stay dark in both themes — aviation-panel style */
+.brief-canvas-wrap,.chart-wrap,.iso-wrap,#threeWrap,.b-mini{background:#0B1626 !important;border-color:#1E3A5F !important}
+html[data-theme="light"] .boot-sub{color:#5B6B82}
+html[data-theme="light"] #scrBoot{background:radial-gradient(ellipse at 50% 30%,#FFFFFF 0%,#E6EBF4 70%)}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
 body{
@@ -78,7 +92,7 @@ input,select{font-family:inherit;color:var(--text)}
 /* ============ TOPBAR ============ */
 .topbar{
   display:flex;align-items:center;justify-content:space-between;
-  padding:14px 16px 10px;background:linear-gradient(180deg,rgba(13,20,32,.95),rgba(13,20,32,.75));
+  padding:14px 16px 10px;background:var(--glass);
   backdrop-filter:blur(18px);border-bottom:1px solid var(--border-soft);z-index:50;
 }
 .topbar .tb-title{font-family:'Space Grotesk';font-weight:700;font-size:16px;letter-spacing:2px}
@@ -178,7 +192,7 @@ input,select{font-family:inherit;color:var(--text)}
 .tab-pane.on{display:block}
 .tabbar{
   position:absolute;bottom:0;left:0;right:0;display:flex;
-  background:rgba(13,20,32,.92);backdrop-filter:blur(20px);
+  background:var(--glass);backdrop-filter:blur(20px);
   border-top:1px solid var(--border-soft);padding:8px 4px calc(8px + var(--safe-b));z-index:60;
 }
 .tabbtn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 0;color:var(--dim);transition:color .2s}
@@ -268,6 +282,32 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
 .sync-url{width:100%;background:var(--panel2);border:1px solid var(--border-soft);border-radius:var(--r-sm);padding:11px;font-family:'JetBrains Mono';font-size:11px;outline:none;color:var(--cyan)}
 .toast{position:fixed;top:14px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--panel);border:1px solid var(--border);color:var(--text);padding:11px 20px;border-radius:99px;font-size:13px;font-weight:600;z-index:500;transition:transform .35s cubic-bezier(.2,1,.3,1);box-shadow:0 10px 40px rgba(0,0,0,.5)}
 .toast.show{transform:translateX(-50%) translateY(0)}
+.btn-amber{position:relative;overflow:hidden}
+.btn-amber::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.35),transparent);
+  animation:shimmer 3.2s ease-in-out infinite}
+@keyframes shimmer{0%,70%{left:-80%}100%{left:140%}}
+.card{animation:cardIn .5s cubic-bezier(.2,1,.3,1) both;box-shadow:var(--glow)}
+.card:nth-child(2){animation-delay:.05s}.card:nth-child(3){animation-delay:.1s}
+.card:nth-child(4){animation-delay:.15s}.card:nth-child(5){animation-delay:.2s}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+.stat .s-value{animation:numPop .55s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes numPop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.turn-progress{position:absolute;left:0;bottom:-1px;height:2px;background:linear-gradient(90deg,var(--amber),var(--amber-hi));
+  box-shadow:0 0 8px var(--amber);transition:width .8s cubic-bezier(.2,1,.3,1);border-radius:0 2px 2px 0}
+.theme-btn{width:34px;height:34px;border-radius:11px;border:1px solid var(--border-soft);
+  display:flex;align-items:center;justify-content:center;color:var(--muted);background:var(--panel2);
+  transition:transform .3s,color .3s}
+.theme-btn:active{transform:rotate(140deg) scale(.9)}
+.tchip.locked{opacity:.45}
+.tchip.locked .tc-name{color:var(--dim)}
+.tchip svg.lock{width:11px;height:11px;color:var(--dim)}
+#bootFx{position:absolute;inset:0;pointer-events:none}
+.boot-inner{position:relative;z-index:2}
+.reveal-glow{animation:revealGlow 1.6s ease-out both}
+@keyframes revealGlow{0%{text-shadow:0 0 0 transparent}30%{text-shadow:0 0 28px rgba(0,200,240,.9)}100%{text-shadow:0 0 6px rgba(0,200,240,.25)}}
+.lock-note{display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono';font-size:9.5px;
+  letter-spacing:1.5px;color:var(--dim);text-transform:uppercase;margin:-4px 0 12px}
 @media(min-width:760px){
   .scroll-area,.tab-pane{max-width:680px;margin:0 auto;left:0;right:0}
   .slide{max-width:680px;margin:0 auto}
@@ -278,7 +318,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
 
 <!-- ================= BOOT ================= -->
 <div class="screen active" id="scrBoot">
-  <div>
+  <canvas id="bootFx"></canvas>
+  <div class="boot-inner">
     <div class="boot-seal">
       <svg viewBox="0 0 100 100" fill="none">
         <circle cx="50" cy="50" r="46" stroke="#D4920A" stroke-width="1.5" opacity=".5"/>
@@ -409,7 +450,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;heigh
 
 <!-- ================= GAME ================= -->
 <div class="screen" id="scrGame">
-  <div class="topbar">
+  <div class="topbar" style="position:relative">
+    <div class="turn-progress" id="turnProg" style="width:0%"></div>
     <div>
       <div class="tb-phase" id="gPhase">Field Development</div>
       <div class="tb-title" id="gTeamTitle">—</div>
@@ -472,35 +514,35 @@ const TEAM_META=[
 ];
 
 const BLOCKS={
-  A:{code:'BLK-A',name:'The Crown',pos:'North Crest',topDepth:2650,
+  A:{code:'BLK-A',name:'The Crown',pos:'West Crest',topDepth:2650,
      truth:{owc:2718,col:68,api:42,pb:2850,pres:3420,rs:780,muo:0.8,bo:1.42,
             phi:0.26,k:180,ntg:0.78,swi:0.10,sor:0.20,aquifer:0.90,qualAdj:+2,
             stoiip:4200,facies:'Platform (partly leached)',sulfur:0.3,
             krwEnd:0.30,kroMax:0.92,nw:1.9,no:2.6,lambda:2.4,pce:4,
             nc:['NC4_COMPART','NC3_CEMENT'],posEv:'EV_LEACH',negEv:'EV_AQSURGE'},
-     hint:'Highest structural position. Strongest seismic image. Column thickness uncertain — crestal closure is tight.'},
-  B:{code:'BLK-B',name:'The Mirror',pos:'East Crest',topDepth:2670,
+     hint:'The crest itself, hard against the steep western limb. Strongest seismic image on the structure — and the flat-contact isopach loves it.'},
+  B:{code:'BLK-B',name:'The Mirror',pos:'Upper East Flank',topDepth:2670,
      truth:{owc:2765,col:95,api:40,pb:3100,pres:3380,rs:830,muo:0.9,bo:1.38,
             phi:0.22,k:85,ntg:0.72,swi:0.14,sor:0.24,aquifer:0.55,qualAdj:+1,
             stoiip:3100,facies:'Barrier grainstone',sulfur:0.5,
             krwEnd:0.26,kroMax:0.88,nw:2.1,no:3.0,lambda:1.6,pce:8,
             nc:['NC1_FAULT','NC2_FRAC','NC5_SWEET'],posEv:'EV_FRAC',negEv:'EV_BELOWPB'},
-     hint:'East flank closure. Lineaments on seismic suggest a fracture fabric — productivity wildcard, sealing unknown.'},
-  C:{code:'BLK-C',name:'The Flank',pos:'South-West Flank',topDepth:2750,
+     hint:'First step down the eastern dip slope. Fracture lineaments cross the license — productivity wildcard, sealing unknown.'},
+  C:{code:'BLK-C',name:'The Flank',pos:'Mid East Flank',topDepth:2750,
      truth:{owc:2935,col:185,api:28,pb:1950,pres:3180,rs:380,muo:4.8,bo:1.18,
             phi:0.30,k:450,ntg:0.88,swi:0.08,sor:0.26,aquifer:0.95,qualAdj:-8,
             stoiip:6800,facies:'Platform leached (vuggy) + diagenetic belt',sulfur:2.1,
             krwEnd:0.28,kroMax:0.88,nw:2.0,no:2.8,lambda:2.8,pce:3,
             nc:['NC3_CEMENT','NC2_CHANNEL'],posEv:'EV_HEAVYDEAL',negEv:'EV_CHANNEL'},
-     hint:'Down-flank position with the largest gross rock volume — if charged. Diagenetic overprint mapped at top reservoir.'},
-  D:{code:'BLK-D',name:'The Deep South',pos:'South Plunge',topDepth:2800,
+     hint:'Mid-flank east, where gross rock volume is largest — if the contact cooperates. Diagenetic belt and an incised channel mapped at top reservoir.'},
+  D:{code:'BLK-D',name:'The Deep South',pos:'Deep East Plunge',topDepth:2800,
      truth:{owc:2955,col:155,api:34,pb:2680,pres:3050,rs:620,muo:1.6,bo:1.29,
             phi:0.20,k:65,ntg:0.68,swi:0.22,sor:0.28,aquifer:0.25,qualAdj:0,
             stoiip:3800,facies:'Mixed barrier-platform, layered',sulfur:0.6,
             khaybar:{giip:18,cgr:85,api:45},
             krwEnd:0.24,kroMax:0.80,nw:2.4,no:3.4,lambda:1.2,pce:12,
             nc:['NC3_CEMENT','NC4_COMPART'],posEv:'EV_KHAYBAR',negEv:'EV_SUBSIDE'},
-     hint:'Deepest license, longest tieback. A deeper seismic event below main pay remains untested basin-wide.'},
+     hint:'The deep eastern plunge. The flat-contact map calls it marginal. A deeper seismic event below main pay has never been tested.'},
 };
 
 const PLATFORMS=[
@@ -742,7 +784,7 @@ const Brief={
     const stage=$('briefStage'); stage.innerHTML=''; this.anims.forEach(a=>cancelAnimationFrame(a)); this.anims=[];
     const S=[
       {k:'Memorandum 01 · Basin',h:'A carbonate giant, offered whole.',
-       body:`<p>The <span class="hl">Zafar Basin</span> hosts a single doubly-plunging anticline — <span class="hl">180 km long, 25 km wide</span> — on a Cretaceous carbonate shelf. Regional charge is proven. The Authority is offering the structure as four contiguous licenses in one sealed round.</p>`,
+       body:`<p>The <span class="hl">Zafar Basin</span> hosts a single asymmetric anticline — <span class="hl">crest hard against the steep western limb, dip slope running long and gentle to the east</span> — on a Cretaceous carbonate shelf. Regional charge is proven. The Authority is offering the structure as four contiguous licenses in one sealed round.</p>`,
        cv:'basin',ch:200},
       {k:'Memorandum 02 · Petroleum system',h:'Charged from below, sealed from above.',
        body:`<p>Type-II source shale of Jurassic age lies in the kitchen east of the structure, mature since ~65 Ma. Migration is vertical along salt-related conduits, then lateral beneath the <span class="hl">regional anhydrite seal</span>. Every element of the system is proven by basin analogue. What is not proven is <span class="hl">where the oil stops</span>.</p>`,
@@ -757,7 +799,7 @@ const Brief={
        body:`<p>Reservoir quality follows the Cretaceous shelf geometry. <span class="hl">Leached platform</span> rock in the west runs to Darcy-class permeability. The <span class="hl">barrier crest</span> is moderate. Basinward, the rock tightens fast. Diagenesis rewrites the map locally.</p>`,
        cv:'facies',ch:230},
       {k:'Memorandum 06 · Structure',h:'The map you will bid on.',
-       body:`<p>Depth structure, top Nakheel C. Crest at <span class="mono hl">−2,650 m</span>. Spill not mapped. The Authority's fluid contact estimate is withheld pending appraisal — regional analogues suggest the contact <span class="hl">may not be flat</span>.</p>`,
+       body:`<p>Depth structure, top Nakheel C. Crest at <span class="mono hl">−2,650 m</span> in the west; the structure steps down eastward through all four licenses. The Authority's fluid contact estimate is withheld pending appraisal — regional analogues suggest the contact <span class="hl">may not be flat</span> — hydrodynamic flow can tilt it down toward the east, against the dip of the isopach you are reading.</p>`,
        cv:'struct',ch:260},
       {k:'Memorandum 07 · Data room',h:'Known. Unknown. Priced accordingly.',
        body:`<table class="kv-table">
@@ -935,17 +977,25 @@ const Brief={
     /* pulsing contour structure map — the signature */
     const draw=(pulse)=>{
       x.fillStyle='#070E1A';x.fillRect(0,0,w,h);
-      const cx=w*.5, cy=h*.52, rx=w*.40, ry=h*.30;
+      /* asymmetric: crest pinned west, contours stretch east */
+      const cx=w*.12, cy=h*.52, ry=h*.30;
       for(let i=8;i>=1;i--){
         const f=i/8;
         const glow=Math.max(0,1-Math.abs(pulse-f)*4);
-        x.beginPath(); x.ellipse(cx,cy,rx*f,ry*f,-.06,0,Math.PI*2);
+        x.beginPath(); x.ellipse(cx+w*.04*f,cy,w*.80*f,ry*Math.pow(f,.8),0,-Math.PI/2,Math.PI/2);
         x.strokeStyle=`rgba(212,146,10,${.18+.5*glow})`; x.lineWidth=1+glow*1.5; x.stroke();
         if(i%2===0){x.fillStyle='rgba(107,130,160,.7)';x.font='500 7px JetBrains Mono';
-          x.fillText('-'+(2650+Math.round(f*300)),cx+rx*f*.72,cy-ry*f*.72);}
+          x.fillText('-'+(2650+Math.round(f*330)),cx+w*.80*f-14,cy-ry*Math.pow(f,.8)*.5);}
       }
-      x.fillStyle='#F2B33D';x.font='700 9px JetBrains Mono';x.textAlign='center';
-      x.fillText('CREST −2650 m',cx,cy+3);x.textAlign='left';
+      /* steep west limb */
+      x.strokeStyle='rgba(255,90,69,.5)';x.setLineDash([2,3]);
+      x.beginPath();x.moveTo(cx-10,h*.16);x.lineTo(cx-10,h*.88);x.stroke();x.setLineDash([]);
+      x.fillStyle='#FF7A60';x.font='600 6.5px JetBrains Mono';x.save();
+      x.translate(cx-16,h*.5);x.rotate(-Math.PI/2);x.textAlign='center';x.fillText('STEEP W LIMB',0,0);x.restore();x.textAlign='left';
+      x.fillStyle='#F2B33D';x.font='700 9px JetBrains Mono';
+      x.fillText('CREST −2650 m',cx+6,cy+3);
+      x.fillStyle='rgba(107,130,160,.9)';x.font='600 7px JetBrains Mono';
+      x.fillText('DIP →  EAST',w*.62,cy+3);
       /* block boundary lines */
       x.strokeStyle='rgba(226,234,244,.25)';x.setLineDash([4,4]);
       [.25,.5,.75].forEach(t=>{x.beginPath();x.moveTo(w*t,h*.08);x.lineTo(w*t,h*.95);x.stroke();});
@@ -1040,11 +1090,14 @@ const Auction={
     const c=$('mini'+k); if(!c)return; const x=c.getContext('2d');
     x.fillStyle='#0A1422'; x.fillRect(0,0,200,88);
     const i=['A','B','C','D'].indexOf(k);
-    for(let r=5;r>=1;r--){ x.beginPath();
-      x.ellipse(100-i*16+32,46,70*r/5,30*r/5,-.05,0,7);
-      x.strokeStyle=`rgba(212,146,10,${.45-r*.07})`; x.lineWidth=1; x.stroke(); }
-    x.strokeStyle='rgba(226,234,244,.3)'; x.strokeRect(60,6,80,76);
-    x.fillStyle='rgba(212,146,10,.10)'; x.fillRect(60,6,80,76);
+    /* west-pinned contours; the license window slides east per block */
+    for(let r=6;r>=1;r--){ x.beginPath();
+      x.ellipse(8,44,180*r/6,34*Math.pow(r/6,.8),0,-Math.PI/2,Math.PI/2);
+      x.strokeStyle=`rgba(212,146,10,${.50-r*.07})`; x.lineWidth=1; x.stroke(); }
+    const bx=10+i*44;
+    x.strokeStyle='rgba(226,234,244,.35)'; x.strokeRect(bx,6,44,76);
+    x.fillStyle='rgba(212,146,10,.10)'; x.fillRect(bx,6,44,76);
+    x.fillStyle='rgba(107,130,160,.8)';x.font='600 7px monospace';x.fillText('W',4,12);x.fillText('E',190,12);
   },
   pick(k){ if(G.teams.find(t=>t.block===k))return; this.sel=k; this.renderBlocks(); },
   submit(){
@@ -1137,19 +1190,16 @@ const Place={
 
   /* probabilistic isopach: anticline thickness + tilt + noise. NOT the truth. */
   thick(t,u,v){
-    const b=BLOCKS[t.block]; const i=['A','B','C','D'].indexOf(t.block);
-    /* anticline axis runs N-S through u≈axis; crest position shifts per block */
-    const axis=0.5+(i===1?0.08:i===2?-0.06:0);
-    const du=(u-axis)/0.42, dv=(v-0.5)/0.62;
-    let th=Math.exp(-(du*du*2.4+dv*dv*1.4));
-    /* blocks further south carry thicker probabilistic column (tilt rumor) */
-    th*=0.55+0.45*(i/3);
-    /* noise field */
-    th*=1+0.18*Math.sin(u*21+i*3)*Math.cos(v*17-i*2);
-    if(t.block==='C'){ /* channel scar visible */
-      const d=Math.abs((u-0.30)-(v-0.2)*0.25);
-      if(d<0.05) th*=0.55;
-    }
+    /* Authority pre-drill isopach assumes a FLAT contact:
+       thickest at the western crest, thinning east to the mapped pinch-out.
+       The truth (tilted contact) will betray it. */
+    const i=['A','B','C','D'].indexOf(t.block);
+    const gu=(i+u)/4;                       /* global west→east position 0..1 */
+    const dv=(v-0.5)/0.55;                  /* crossdip falloff */
+    let th=Math.exp(-gu*2.1)*Math.exp(-dv*dv*1.6);
+    th*=1+0.16*Math.sin(u*23+i*3)*Math.cos(v*19-i*2);   /* mapping noise */
+    if(t.block==='C'){ const d=Math.abs((u-0.45)-(v-0.2)*0.3);
+      if(d<0.05) th*=0.55; }                /* channel scar */
     return clamp(th,0,1);
   },
   bindCanvas(){
@@ -1266,6 +1316,7 @@ const Game={
     $('gPhase').textContent=BLOCKS[t.block].code+' · '+BLOCKS[t.block].name;
     $('gCash').textContent='$'+fmt(t.cash)+'M';
     $('gTurn').textContent='T'+G.turn+' · '+(G.year+G.turn-1);
+    const tp=$('turnProg'); if(tp)tp.style.width=Math.min(100,G.turn/15*100)+'%';
   },
   render(){
     this.header();
@@ -1342,11 +1393,14 @@ const Field={
   },
 };
 const TeamStrip={
-  html(){ return `<div class="team-strip">${G.teams.map((t,i)=>`
-    <div class="tchip ${i===G.activeTeam?'on':''}" style="color:${t.color}">
-      <div class="tc-dot" style="background:${t.color}">${t.meta}</div>
+  html(){ return `<div class="team-strip">${G.teams.map((t,i)=>{
+      const on=i===G.activeTeam;
+      return `<div class="tchip ${on?'on':'locked'}" style="color:${t.color}">
+      <div class="tc-dot" style="background:${on?t.color:'var(--dim)'}">${t.meta}</div>
       <div class="tc-name">${t.name.split(' ')[0]}</div>
-    </div>`).join('')}</div>`; },
+      ${on?'':'<svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>'}
+    </div>`;}).join('')}</div>
+    <div class="lock-note"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg> View locked to active operator · rivals see public disclosures only</div>`; },
 };
 
 /* ============================================================
@@ -1425,7 +1479,7 @@ const Drill={
       t.owcKnown=true; t.aqKnown=true; t.state.pres=tr.pres;
       const col=tr.owc-BLOCKS[t.block].topDepth;
       Modal.show({kicker:'WELL '+w.name+' · MDT GRADIENT',sev:col>120?'pos':'neg',
-        title:'The contact is proven: −'+fmt(tr.owc)+' m',
+        title:'<span class="reveal-glow" style="color:var(--cyan)">The contact is proven: −'+fmt(tr.owc)+' m</span>',
         chips:['Oil column '+col+' m','Aquifer: '+(tr.aquifer>.8?'STRONG':tr.aquifer>.4?'MODERATE':'WEAK'),'STOIIP P50 ~'+fmt(tr.stoiip*(t.state.stoiipMult||1))+' MMbbl'],
         html:`<p>Pressure points line up on two gradients; the intersection nails the free water level. ${col>150?'A monster column — the tilted contact runs deep beneath your license.':col>90?'A workable column with honest margins.':'A thin column. The crest flattered you on the structure map: water is close beneath every lateral you will drill.'}</p>
         <p>Development drilling is now released. The structure section updates live.</p>`,
@@ -1854,7 +1908,8 @@ const Board={
   render(){
     const rank=[...G.teams].sort((a,b)=>b.state.npv-a.state.npv);
     $('paneBoard').innerHTML=`
-      <div class="eyebrow">Turn ${G.turn} of 15 · ${DECK()?'Price deck sealed':''}</div>
+      <div class="eyebrow">Public disclosures · Turn ${G.turn} of 15 · price deck sealed</div>
+      <p style="font-size:11.5px;color:var(--dim);margin:-2px 0 12px">Regulator filings: NPV, cum production, well count are public. Subsurface data stays private.</p>
       ${rank.map((t,i)=>`
         <div class="lb-row ${i===0?'first':''}">
           <div class="lb-rank">${i+1}</div>
@@ -1909,11 +1964,12 @@ const Three3D={
     const dl=new THREE.DirectionalLight(0xffeecc,0.9); dl.position.set(3,5,2); this.scene.add(dl);
     this.build(); this.bind(cv); this.loop(this.token);
   },
-  /* anticline surface z = f(x,y); x along strike (4 blocks), y across */
-  topZ(x,y){ return -0.2 - 1.1*(1-Math.exp(-(x*x*0.55+y*y*1.9))); },
+  /* asymmetric anticline: crest at west (x=-3), long dip slope east (x=+3) */
+  topZ(x,y){ const e=(x+3)/6;  /* 0 west → 1 east */
+    return -0.15 - 1.5*Math.pow(e,1.15) - 0.55*y*y*(0.35+0.65*e); },
   build(){
     const t=T(),tr=BT(t);
-    const grp=new THREE.Group();
+    const grp=new THREE.Group(); this.owcs=[];
     /* top reservoir surface */
     const geo=new THREE.PlaneGeometry(6,3,56,28);
     const pos=geo.attributes.position;
@@ -1931,13 +1987,11 @@ const Three3D={
     /* tilted OWC planes — only for blocks whose teams proved the contact */
     G.teams.forEach((tt,i)=>{ if(!tt.owcKnown)return;
       const trr=BLOCKS[tt.block].truth;
-      const depthN=-0.2-1.3*(trr.owc-2650)/350;  /* normalize */
+      const depthN=-0.30-1.45*(trr.owc-2700)/300;  /* deepens eastward with the tilt */
       const owc=new THREE.Mesh(new THREE.PlaneGeometry(1.45,3),
         new THREE.MeshBasicMaterial({color:0x00C8F0,transparent:true,opacity:0.22,side:THREE.DoubleSide}));
       owc.rotation.x=-Math.PI/2; owc.position.set(-2.25+i*1.5,depthN,0); grp.add(owc);
-      const ring=new THREE.Mesh(new THREE.RingGeometry(0.0,0.7,4,1),
-        new THREE.MeshBasicMaterial({color:0x00C8F0,transparent:true,opacity:0.0}));
-      grp.add(ring);
+      (this.owcs=this.owcs||[]).push(owc);
     });
     /* platform + wells for active team */
     const ti=['A','B','C','D'].indexOf(t.block);
@@ -1989,6 +2043,9 @@ const Three3D={
     this.rotY+=0.0012;
     this.camera.position.set(Math.sin(this.rotY)*r,1.2+this.rotX*2.2,Math.cos(this.rotY)*r);
     this.camera.lookAt(0,-0.7,0);
+    /* shimmer the proven contacts */
+    if(this.owcs){const tt=performance.now()/900;
+      this.owcs.forEach((m,i)=>{if(m.material)m.material.opacity=0.18+0.10*Math.abs(Math.sin(tt+i));});}
     this.renderer.render(this.scene,this.camera);
     requestAnimationFrame(()=>this.loop(tok));
   },
@@ -2028,9 +2085,64 @@ const Sync={
 };
 
 /* ============================================================
+   THEME — light/dark with view-transition wipe
+   ============================================================ */
+const Theme={
+  cur:localStorage.getItem('strata_theme')||'dark',
+  apply(){ document.documentElement.setAttribute('data-theme',this.cur); },
+  toggle(){
+    const flip=()=>{ this.cur=this.cur==='dark'?'light':'dark';
+      localStorage.setItem('strata_theme',this.cur);
+      document.documentElement.classList.add('theming');
+      this.apply(); this.icons();
+      setTimeout(()=>document.documentElement.classList.remove('theming'),500); };
+    if(document.startViewTransition) document.startViewTransition(flip); else flip();
+  },
+  btn(){ return `<button class="theme-btn" onclick="Theme.toggle()" aria-label="theme">${this.icon()}</button>`; },
+  icon(){ return this.cur==='dark'
+    ?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4l1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4m11.4-11.4l1.4-1.4"/></svg>'
+    :'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>'; },
+  icons(){ document.querySelectorAll('.theme-btn').forEach(b=>b.innerHTML=this.icon()); },
+  mount(){
+    document.querySelectorAll('.topbar').forEach(tb=>{
+      if(tb.querySelector('.theme-btn'))return;
+      const right=tb.querySelector('.tb-right');
+      const span=document.createElement('span'); span.innerHTML=this.btn();
+      if(right)right.appendChild(span.firstChild);
+      else tb.appendChild(span.firstChild);
+    });
+  },
+};
+
+/* ============================================================
+   BOOT FX — drifting seismic particle field
+   ============================================================ */
+const BootFx={
+  start(){
+    const c=$('bootFx'); if(!c)return;
+    const W=c.clientWidth=c.parentElement.clientWidth, H=c.clientHeight=c.parentElement.clientHeight;
+    c.width=W*2;c.height=H*2; const x=c.getContext('2d'); x.scale(2,2);
+    const N=42, pts=Array.from({length:N},()=>({px:Math.random()*W,py:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25}));
+    const loop=()=>{
+      if(!$('scrBoot').classList.contains('active'))return;
+      x.clearRect(0,0,W,H);
+      const dark=Theme.cur==='dark';
+      pts.forEach(p=>{ p.px=(p.px+p.vx+W)%W; p.py=(p.py+p.vy+H)%H; });
+      for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){
+        const a=pts[i],b=pts[j],d=Math.hypot(a.px-b.px,a.py-b.py);
+        if(d<90){ x.strokeStyle=dark?`rgba(212,146,10,${.14*(1-d/90)})`:`rgba(22,32,46,${.10*(1-d/90)})`;
+          x.beginPath();x.moveTo(a.px,a.py);x.lineTo(b.px,b.py);x.stroke(); } }
+      pts.forEach(p=>{ x.fillStyle=dark?'rgba(242,179,61,.5)':'rgba(22,32,46,.35)';
+        x.beginPath();x.arc(p.px,p.py,1.3,0,7);x.fill(); });
+      requestAnimationFrame(loop);
+    }; loop();
+  },
+};
+
+/* ============================================================
    BOOT
    ============================================================ */
-window.addEventListener('load',()=>{ G=newGame(); });
+window.addEventListener('load',()=>{ G=newGame(); Theme.apply(); Theme.mount(); Theme.icons(); BootFx.start(); });
 /* re-render on team handoff: also surface pending events */
 const _origShow=Handoff.show.bind(Handoff);
 Handoff.show=(team,sub,cb)=>{ _origShow(team,sub,()=>{ cb&&cb(); setTimeout(()=>EventGate.check(),350); }); };
